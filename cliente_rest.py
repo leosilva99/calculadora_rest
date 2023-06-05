@@ -1,16 +1,15 @@
 import requests
 from tkinter import Tk, Label, Button, Entry
 
-def operacoes():
-    response = requests.get(f"http://ec2-3-133-82-159.us-east-2.compute.amazonaws.com:3000/calculadora/operacoes")
-    result = response.json()
-    label_result.config(text=result)
-
 def send_request(operation):
-    num1 = entry_num1.get()
-    num2 = entry_num2.get()
-    #data = {"value1": str(num1), "value2": str(num2)}
-    response = requests.post(f"http://ec2-3-133-82-159.us-east-2.compute.amazonaws.com:3000/calculadora/operacoes/{operation}/{num1}/{num2}")
+    if operation == "operações":
+        response = requests.get(f"http://ec2-3-133-82-159.us-east-2.compute.amazonaws.com:3000/calculadora/operacoes")
+    
+    else:
+        num1 = entry_num1.get()
+        num2 = entry_num2.get()
+        response = requests.post(f"http://ec2-3-133-82-159.us-east-2.compute.amazonaws.com:3000/calculadora/operacoes/{operation}/{num1}/{num2}")
+    
     result = response.json()
     label_result.config(text=result)
 
@@ -27,7 +26,7 @@ entry_num2 = Entry(window)
 entry_num2.pack()
 
 # Configurar os botões
-button_operacoes = Button(window, text="Operações", command=operacoes)
+button_operacoes = Button(window, text="Operações", command=lambda: send_request("operações"))
 button_operacoes.pack()
 
 button_soma = Button(window, text="+", command=lambda: send_request("soma"))
